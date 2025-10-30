@@ -11,11 +11,25 @@ class App extends Component {
         };
         this.renderChoice = this.renderBallOrButton.bind(this)
         this.buttonClickHandler = this.buttonClickHandler.bind(this)
+		this.handleKeyDown = this.handleKeyDown.bind(this)
     };
 
     buttonClickHandler() {
+		this.setState({renderBall: true});
    
    }
+	 handleKeyDown(event) {
+        if (event.keyCode === 39) {  // Right arrow key
+            this.setState((prevState) => {
+                const newPos = prevState.posi + 5;
+                return {
+                    posi: newPos,
+                    ballPosition: { left: newPos + "px" }
+                };
+            });
+        }
+    }
+	
     renderBallOrButton() {
 		if (this.state.renderBall) {
 		    return <div className="ball" style={this.state.ballPosition}></div>
@@ -26,6 +40,13 @@ class App extends Component {
 
     // bind ArrowRight keydown event
     componentDidMount() {
+		 document.addEventListener("keydown", this.handleKeyDown);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.handleKeyDown);
+    }
+
       
     }
 
