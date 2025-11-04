@@ -9,51 +9,36 @@ class App extends Component {
             posi : 0,
             ballPosition: { left: "0px" }
         };
-        this.renderChoice = this.renderBallOrButton.bind(this)
+        this.renderChoice = this.renderChoice.bind(this)
         this.buttonClickHandler = this.buttonClickHandler.bind(this)
-		this.handleKeyDown = this.handleKeyDown.bind(this)
     };
 
+
     buttonClickHandler() {
-		this.setState({renderBall: true});
-   
-   }
-	 handleKeyDown(event) {
-        if (event.keyCode === 39) {  // Right arrow key
-            this.setState((prevState) => {
-                const newPos = prevState.posi + 5;
-                return {
-                    posi: newPos,
-                    ballPosition: { left: newPos + "px" }
-                };
-            });
+        this.setState({ renderBall: true })
+    }
+    renderChoice() {
+        if (this.state.renderBall === false) {
+            return <button className="start" onClick={this.buttonClickHandler} >Click For One Ball</button>
+        }
+        else if (this.state.renderBall === true) {
+            return <div className="ball" style={this.state.ballPosition}></div>
         }
     }
-	
-    renderBallOrButton() {
-		if (this.state.renderBall) {
-		    return <div className="ball" style={this.state.ballPosition}></div>
-		} else {
-		    return <button onClick={this.buttonClickHandler} >Start</button>
-		}
-    }
 
-    // bind ArrowRight keydown event
     componentDidMount() {
-		 document.addEventListener("keydown", this.handleKeyDown);
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener("keydown", this.handleKeyDown);
-    }
-
-      
+        
+        document.addEventListener("keydown", (e) => {
+            if (e.keyCode === 39) {
+                this.setState({ ballPosition: { left: this.state.posi+5+ "px"}, posi: this.state.posi + 5 })
+            }
+        })
     }
 
     render() {
         return (
             <div className="playground">
-                {this.renderBallOrButton()}
+                {this.renderChoice()}
             </div>
         )
     }
